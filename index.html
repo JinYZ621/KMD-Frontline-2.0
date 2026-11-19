@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KMD 代号：前线 2.0</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#07111c;color:#eaf5ff;font-family:Arial,"Microsoft YaHei",sans-serif;overflow:hidden}
+#game{position:fixed;inset:0}
+canvas{display:block}
+.panel{background:#081827ee;border:1px solid #31536a;border-radius:10px;padding:14px}
+#top{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:22px;align-items:center;white-space:nowrap}
+#brand{color:#53e4ff;font-weight:900;letter-spacing:2px}
+#score{font-size:22px;font-weight:bold}
+#timer{color:#ffc857;font-size:22px}
+#radarBox{position:fixed;right:12px;top:12px}
+#radar{width:150px;height:150px;background:#091a27}
+#hud{position:fixed;left:12px;bottom:12px;display:flex;gap:8px}
+.stat{min-width:75px}
+.stat small{display:block;color:#8ca6bc}
+.stat b{font-size:22px}
+#feed{position:fixed;right:12px;top:180px;text-align:right;font-size:12px}
+#cross{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+#cross:before,#cross:after{content:"";position:absolute;background:white}
+#cross:before{width:2px;height:18px;left:-1px}
+#cross:after{width:18px;height:2px;top:8px;left:-9px}
+#hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:12px;white-space:nowrap}
+#overlay{position:fixed;inset:0;background:#02070de8;display:flex;justify-content:center;align-items:center;z-index:10}
+#menu{width:min(480px,94vw);padding:28px}
+h1{font-size:38px;margin:0;color:white}
+h1 span{color:#53e4ff}
+input{width:100%;padding:12px;margin:7px 0;background:#091927;color:white;border:1px solid #34536a;border-radius:6px}
+button{padding:12px 16px;border:0;border-radius:6px;background:#35c9df;color:#03111a;font-weight:bold;cursor:pointer}
+button.secondary{background:#172c3c;color:white;border:1px solid #34536a}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wide{width:100%;margin-top:8px}
+#status{color:#ffc857;font-size:12px;margin-top:10px}
+#buy{position:fixed;inset:0;background:#02070ddd;display:none;align-items:center;justify-content:center;z-index:8}
+#buyPanel{width:min(600px,95vw)}
+#buyGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.buyItem{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#102537;border-radius:6px}
+#roundMsg{position:fixed;top:30%;left:50%;transform:translateX(-50%);font-size:30px;font-weight:bold;text-shadow:0 3px 10px black}
+@media(max-width:600px){#radarBox{transform:scale(.7);transform-origin:top right}#feed{display:none}#hint{font-size:9px}}
+</style>
+</head>
+<body>
+
+<div id="game"></div>
+<div id="cross"></div>
+
+<div id="top" class="panel">
+ <div id="brand">KMD FRONTLINE</div>
+ <div id="score">CT 0 : 0 T</div>
+ <div id="timer">等待玩家</div>
+ <div id="phase">大厅</div>
+</div>
+
+<div id="radarBox" class="panel">
+ <div style="font-size:10px;margin-bottom:5px">TACTICAL RADAR</div>
+ <canvas id="radar" width="300" height="300"></canvas>
+</div>
+
+<div id="feed"></div>
+
+<div id="hud">
+ <div class="panel stat"><small>生命</small><b id="hp">100</b></div>
+ <div class="panel stat"><small>护甲</small><b id="armor">0</b></div>
+ <div class="panel stat"><small>弹药</small><b id="ammo">30/90</b></div>
+ <div class="panel stat"><small>资金</small><b id="cash">$800</b></div>
+</div>
+
+<div id="hint">
+ WASD移动 · 鼠标射击 · R换弹 · B购买 · E安装/拆除 · Shift冲刺 · ESC释放鼠标
+</div>
+
+<div id="roundMsg"></div>
+
+<div id="overlay">
+ <div id="menu" class="panel">
+  <h1>KMD <span>FRONTLINE</span></h1>
+  <p style="color:#91aabd">代号：前线 2.0 · TACTICAL STRIKE</p>
+  <input id="nick" maxlength="16" value="Operator" placeholder="玩家名称">
+  <input id="room" maxlength="12" value="KMD01" placeholder="房间号">
+  <div class="actions">
+   <button id="join">加入多人战局</button>
+   <button id="practice" class="secondary">本地训练场</button>
+  </div>
+  <div id="status">输入相同房间号，与好友一起游戏。</div>
+ </div>
+</div>
+
+<div id="buy">
+ <div id="buyPanel" class="panel">
+  <h2 style="color:#53e4ff">购买菜单</h2>
+  <div id="buyCash"></div>
+  <div id="buyGrid"></div>
+  <button id="buyClose" class="wide secondary">关闭</button>
+ </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="client.js"></script>
+</body>
+</html>
