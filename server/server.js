@@ -16,7 +16,7 @@ const io = new Server(server,{
 
 const PORT=process.env.PORT||3000;
 
-app.use(express.static(path.join(__dirname,"../client")));
+app.use(express.static(path.join(__dirname, "..")));
 
 app.get("/health",(req,res)=>{
   res.json({ok:true,game:"KMD Frontline 2.0"});
