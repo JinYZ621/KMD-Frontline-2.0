@@ -5,6 +5,13 @@ const path = require("path");
 const {Server} = require("socket.io");
 
 const app = express();
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "KMD Frontline Server is running",
+    version: "2.0.0"
+  });
+});
 const server = http.createServer(app);
 
 const io = new Server(server,{
